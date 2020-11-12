@@ -1,4 +1,3 @@
-package project;
 //importing all the necessary items to create the calendar
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -20,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
@@ -29,7 +30,11 @@ import java.util.*;
 public class classproject extends JFrame {
 	//creating an array with the name of the months
 	static String[] months= {"January","February","March","April","May","June","July","August","September","October","November","December"};
+	static JTextField textfield1;
+	static JTextField textfield2;
+	static JTextField textfield3;
 	
+
 	public static void main(String[] args) {
 		//creating a new gregorian calendar to help set the current day and year
 		GregorianCalendar e=new GregorianCalendar();
@@ -44,7 +49,7 @@ public class classproject extends JFrame {
     	JButton twentythird = new JButton("23");	JButton twentyfourth = new JButton("24");	JButton twentyfifth = new JButton("25");
     	JButton twentysixth = new JButton("26");	JButton twentyseventh = new JButton("27");	JButton twentyeighth = new JButton("28");
     	JButton twentyninth = new JButton("29");	JButton thirtieth = new JButton("30");	JButton thirtyfirst = new JButton("31");
-    	JButton thirtysecond = new JButton("1");
+    	JButton thirtysecond = new JButton("1");	JButton addEvent = new JButton("+"); // creating a button to add events
     	//creating an array list to put the buttons representing each day
     	ArrayList<JButton> one= new ArrayList<JButton>();
     	//adding all of the buttons
@@ -70,8 +75,22 @@ public class classproject extends JFrame {
     		//creating a light gray background color for all of the days
     		one.get(i).setBackground(Color.LIGHT_GRAY);
     	}
+    	
+    	// Implementing an '+' icon to add events to the calendar
+    	addEvent.setFocusable(false);
+    	addEvent.setFont(new Font("Arial", Font.PLAIN, 60));
+    	addEvent.setHorizontalAlignment(SwingConstants.CENTER);
+    	addEvent.setVerticalAlignment(SwingConstants.CENTER);
+    	addEvent.setBorder(new LineBorder(Color.black));
+    	addEvent.setForeground(Color.BLACK);
+    	addEvent.setBounds(1010,120, 100, 100);
+    	
+    	
+    	
+    	
+    	
     	//changing the color of the current day so it is visible
-    	one.get(e.getTime().getDate()-1).setBackground(Color.YELLOW);
+    	one.get(e.getTime().getDate()-1).setBackground(Color.cyan);
     	//locating each button into the Jframe
     	first.setBounds(664,230,158,142);	second.setBounds(822,230,158,142);	third.setBounds(980,230,158,142);
     	fourth.setBounds(32,372,158,142);	fifth.setBounds(190,372,158,142);	sixth.setBounds(348,372,158,142);
@@ -83,8 +102,8 @@ public class classproject extends JFrame {
     	twentysecond.setBounds(664,656,158,142);	twentythird.setBounds(822,656,158,142);	twentyfourth.setBounds(980,656,158,142);
     	twentyfifth.setBounds(32,798,158,142);	twentysixth.setBounds(190,798,158,142);	twentyseventh.setBounds(348,798,158,142);
     	twentyeighth.setBounds(506,798,158,142);	twentyninth.setBounds(664,798,158,142);	thirtieth.setBounds(822,798,158,142);
-    	thirtyfirst.setBounds(980,798,158,142);
-    	
+    	thirtyfirst.setBounds(980,798,158,142); 
+
   //Calendar JFrame 	
     	//creating a new frame
         classproject frame = new classproject();
@@ -99,7 +118,7 @@ public class classproject extends JFrame {
     	//setting the font
     	month.setFont(Month);
     	//giving the foreground color
-    	month.setForeground(Color.black);
+    	month.setForeground(Color.BLACK);
     	//setting the bounds
     	month.setBounds(565,30,500,100);
     	//not able to edit
@@ -121,18 +140,19 @@ public class classproject extends JFrame {
 		frame.setVisible(true);
 		//adding the month and year
 		frame.add(month);
-		
+		frame.add(addEvent);
+
 		//adding each button representing each day
 		for(int i=0;i<one.size();i++) {
 			frame.add(one.get(i));}
-		
-		
+
+
 		//adding the panels
 		frame.add(panel1, BorderLayout.CENTER);
 		frame.add(panel2, BorderLayout.CENTER);
 		// disposing the JFrame when the user hits the close button
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+
 	//SchedulingJFRAME	
 		//adding 4 new buttons
 		JButton appointment = new JButton("Add an appointment");
@@ -146,7 +166,10 @@ public class classproject extends JFrame {
 		two.add(cappointments);
 		two.add(cevents);
 		
-		for(int i=0;i<two.size();i++) {
+		
+
+		for(int i=0;i<two.size();i++) 
+		{
     		//setting the focusable to false so they cannot gain focus
     		two.get(i).setFocusable(false);
     		//giving the information in each button a font
@@ -165,18 +188,131 @@ public class classproject extends JFrame {
 		event.setBounds(200, 250, 250, 50);
 		cappointments.setBounds(200,700,425,50);	
 		cevents.setBounds(200, 550, 300, 50);
+
+		
+		// Creating new JFrame that opens anytime the user clicks the '+' Icon to 
+    	// add another event to the calendar.
+    	
+		addEvent.addActionListener(new ActionListener() 
+    	{
+    		public void actionPerformed(ActionEvent e)
+    		{
+    			classproject addElement = new classproject();
+    			
+    		    JTextField addingEvents = new JTextField("New Event");  
+    		    Font addEvent = new Font("Courier", Font.BOLD, 28);
+    		    addingEvents.setFont(addEvent);
+    		    addingEvents.setBounds(10, 0,350,80);
+    		    addingEvents.setEditable(false);
+    		    addingEvents.setBorder(BorderFactory.createLineBorder(color));
+    		    
+    		    addElement.setSize(465,550);
+    		    addElement.setLayout(null);
+    		    addElement.setVisible(true);
+    		    addElement.add(addingEvents);
+      		    
+    		    JTextField EventName;
+    		    JTextArea EventDescription;
+    		    
+    		    EventName = new JTextField("title");
+    		    Font EventNameFont = new Font("Arial", Font.ITALIC, 18);
+    		    // create a function that will make text disappear onclick
+    		    
+    		    EventName.setFont(EventNameFont);
+    		    EventName.setBounds(120, 80, 200, 45);
+    		    EventName.setHorizontalAlignment(JTextField.CENTER);
+    		    
+    		    // USER NEEDS TO SELECT A DATE.
+    		    
+    		    EventDescription =new JTextArea("Description");
+    		    EventDescription.setBounds(10, 190, 400, 120);
+    		    
+    		    addElement.add(EventName);
+    		    addElement.add(EventDescription);
+    		    
+    		    JComboBox eventStart;
+    		    JComboBox eventEnd;
+    		    JLabel startTimeLabel;
+    		    JLabel endTimeLabel;
+    		    
+    		    String[] Times = {"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
+    		    		"1:00 AM", "1:15 AM", "1:30 AM", "1:45 AM", "2:00 AM", "2:15 AM",
+    		    		"2:30 AM", "2:45 AM", "3:00 AM", "3:15 AM", "3:30 AM", "3:45 AM",
+    		    		"4:00 AM", "4:15 AM", "4:30 AM", "4:45 AM", "5:00 AM", "5:15 AM",
+    		    		"5:30 AM", "5:45 AM", "6:00 AM", "6:15 AM", "6:30 AM", "6:45 AM",
+    		    		"7:00 AM", "7:15 AM", "7:30 AM", "7:45 AM", "8:00 AM", "8:15 AM",
+    		    		"8:30 AM", "8:45 AM", "9:00 AM", "9:15 AM", "9:30 AM", "9:45 AM", 
+    		    		"10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM",
+    		    		"11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM",
+    		    		"1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM",
+    		    		"2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM",
+    		    		"4:00 PM", "4:15 PM", "4:30 PM", "4:45 PM", "5:00 PM", "5:15 PM",
+    		    		"5:30 PM", "5:45 PM", "6:00 PM", "6:15 PM", "6:30 PM", "6:45 PM",
+    		    		"7:00 PM", "7:15 PM", "7:30 PM", "7:45 PM", "8:00 PM", "8:15 PM",
+    		    		"8:30 PM", "8:45 PM", "9:00 PM", "9:15 PM", "9:30 PM", "9:45 PM", 
+    		    		"10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM", "11:00 PM", "11:15 PM",
+    		    		"11:30 PM", "11:45 PM"};
+
+    		    
+    		    eventStart = new JComboBox(Times);
+    		    eventEnd = new JComboBox(Times);
+    		    
+    		    startTimeLabel = new JLabel("Starts");
+    		    endTimeLabel =  new JLabel("Ends");    		    
+    		    addElement.add(startTimeLabel);
+    		    addElement.add(endTimeLabel);
+    		    addElement.add(eventStart);
+    		    addElement.add(eventEnd);
+    		    
+    		    
+    		    
+    		    
+    		    eventStart.setBounds(50, 140, 80, 30);
+    		    startTimeLabel.setBounds(10,140, 50,30);
+    		    
+    		    eventEnd.setBounds(190, 140, 80, 30);
+    		    endTimeLabel.setBounds(150, 140, 50, 30);
+    		    
+    		    JButton submit;
+    		    submit = new JButton("ADD");
+    		    submit.setBounds(335,420,80,30);
+    		    addElement.add(submit);
+    		    
+    		    
+    		    
+    			// I will next be working on adding a userinput dialog that 
+    		    // the user will be able to type the title of the event they are
+    		    // adding. then a text box for location of event
+    		    // then start time & end time
+    		    // then if the event will be repeating
+    		    // then if user would like to be altered at time of event or before
+    		    // lasty i will implement a text box the user can type a description or 
+    		    // any notes of the event
+    		    
+    		    
+    		    
+    		    
+    		}
+    	});
+    		
+    	
+		
+		
+		
+		
 		
 		for(int i=0;i<one.size();i++) {
 			//creating a new Jframe that will open up when the user clicks any of the day buttons, that includes the 4 new buttons
 		one.get(i).addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e){ 
-		
+
 		  classproject options = new classproject();
 	        JPanel title = new JPanel();
 	        JPanel option = new JPanel();
 	        Color color = panel1.getBackground();
 	    	JTextField scheduling = new JTextField("Scheduling");
-	    	
+
 	    	Font schedule = new Font("Arial", Font.BOLD, 48);
 	    	scheduling.setFont(schedule);
 	    	scheduling.setForeground(Color.black);
@@ -214,7 +350,11 @@ public class classproject extends JFrame {
 				    	appointment.add(appo);
 				    	appointment.add(title, BorderLayout.CENTER);
 				    	appointment.add(option, BorderLayout.CENTER);
-						
+				    	
+				    	
+				    	
+				    	
+
 						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 	 
 				    }
 			});
@@ -239,21 +379,16 @@ public class classproject extends JFrame {
 		newevent.add(title, BorderLayout.CENTER);
 		newevent.add(option, BorderLayout.CENTER);
 		newevent.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-		
-	      
-	      
-		
+
+
+
+
     }
 
-	 
+
     }); 
-	 
+
 	    }
 
-		
+
 	} 
-	
-		
-	
-
-
