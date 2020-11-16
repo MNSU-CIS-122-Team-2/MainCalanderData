@@ -24,6 +24,12 @@ import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+
+import errorControl.TextFieldListener;
+
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.sql.SQLException;
 import java.util.*;
 
 
@@ -191,50 +197,34 @@ public class classproject extends JFrame {
 
 		
 		// Creating new JFrame that opens anytime the user clicks the '+' Icon to 
-    	// add another event to the calendar.
+    	// Adds and saves an event to the database
     	
 		addEvent.addActionListener(new ActionListener() 
     	{
+			// implementing all elements
+			
+			classproject addElement = new classproject();
+			
+			JTextField addingEvents;
+		    JTextField eventName;
+		    JTextField EventStartDate;
+		    JTextField EventEndDate;
+		    JTextArea reason;
+		    
+		    JComboBox eventStart;
+		    JComboBox eventEnd;
+		    JComboBox eventColor;
+		    
+		    JLabel startTimeLabel;
+		    JLabel endTimeLabel;
+		    JLabel eventColorLabel;
+		    
+		    JButton submit;
+		    
     		public void actionPerformed(ActionEvent e)
     		{
-    			classproject addElement = new classproject();
+    			// Event Start times
     			
-    		    JTextField addingEvents = new JTextField("New Event");  
-    		    Font addEvent = new Font("Courier", Font.BOLD, 28);
-    		    addingEvents.setFont(addEvent);
-    		    addingEvents.setBounds(10, 0,350,80);
-    		    addingEvents.setEditable(false);
-    		    addingEvents.setBorder(BorderFactory.createLineBorder(color));
-    		    
-    		    addElement.setSize(465,550);
-    		    addElement.setLayout(null);
-    		    addElement.setVisible(true);
-    		    addElement.add(addingEvents);
-      		    
-    		    JTextField EventName;
-    		    JTextArea EventDescription;
-    		    
-    		    EventName = new JTextField("title");
-    		    Font EventNameFont = new Font("Arial", Font.ITALIC, 18);
-    		    // create a function that will make text disappear onclick
-    		    
-    		    EventName.setFont(EventNameFont);
-    		    EventName.setBounds(120, 80, 200, 45);
-    		    EventName.setHorizontalAlignment(JTextField.CENTER);
-    		    
-    		    // USER NEEDS TO SELECT A DATE.
-    		    
-    		    EventDescription =new JTextArea("Description");
-    		    EventDescription.setBounds(10, 190, 400, 120);
-    		    
-    		    addElement.add(EventName);
-    		    addElement.add(EventDescription);
-    		    
-    		    JComboBox eventStart;
-    		    JComboBox eventEnd;
-    		    JLabel startTimeLabel;
-    		    JLabel endTimeLabel;
-    		    
     		    String[] Times = {"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
     		    		"1:00 AM", "1:15 AM", "1:30 AM", "1:45 AM", "2:00 AM", "2:15 AM",
     		    		"2:30 AM", "2:45 AM", "3:00 AM", "3:15 AM", "3:30 AM", "3:45 AM",
@@ -252,45 +242,102 @@ public class classproject extends JFrame {
     		    		"8:30 PM", "8:45 PM", "9:00 PM", "9:15 PM", "9:30 PM", "9:45 PM", 
     		    		"10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM", "11:00 PM", "11:15 PM",
     		    		"11:30 PM", "11:45 PM"};
-
     		    
+    		    // Event color options (Primary & Secondary colors) 
+    		    // will implement the actual color so user can reference
+    		    
+    		    String[] Colors = {"None","Red", "Yellow", "Blue", "Orange", "Green", "Violet"};
+    		    
+    		    // creating all elements
+    		    addingEvents = new JTextField("New Event");
+    		    eventName = new JTextField("title");
+    		    EventStartDate =  new JTextField("11/12/2020");
+    		    EventEndDate =  new JTextField("11/12/2020");
+    		    reason =new JTextArea("Description");
     		    eventStart = new JComboBox(Times);
     		    eventEnd = new JComboBox(Times);
+    		    eventColor = new JComboBox(Colors);
+    		    startTimeLabel = new JLabel("Starts:");
+    		    endTimeLabel =  new JLabel("Ends:");
+    		    eventColorLabel = new JLabel("Event Color:");
+    		    submit = new JButton("ADD");
     		    
-    		    startTimeLabel = new JLabel("Starts");
-    		    endTimeLabel =  new JLabel("Ends");    		    
-    		    addElement.add(startTimeLabel);
-    		    addElement.add(endTimeLabel);
+    		    // Necessary adjustments
+    		    Font addEvent = new Font("Courier", Font.BOLD, 28);
+    		    addingEvents.setFont(addEvent);
+    		    addingEvents.setEditable(false);
+    		    addingEvents.setBorder(BorderFactory.createLineBorder(color));
+    		    
+    		    eventName.setHorizontalAlignment(JTextField.CENTER);
+    		    Font EventNameFont = new Font("Arial", Font.ITALIC, 18);
+    		    eventName.setFont(EventNameFont);
+    		    
+    		    EventStartDate.setHorizontalAlignment(JTextField.CENTER);
+    		    EventEndDate.setHorizontalAlignment(JTextField.CENTER);
+    		    
+    		    
+    		    // Setting the place of each element on the JPanel
+    		    addingEvents.setBounds(10, 0,350,80);
+    		    eventName.setBounds(120, 80, 200, 45);
+    		    reason.setBounds(10, 240, 400, 120);
+    		    EventStartDate.setBounds(50, 140, 80, 30);
+    		    EventEndDate.setBounds(190, 140, 80, 30);
+    		    eventStart.setBounds(50, 190, 80, 30);
+    		    eventEnd.setBounds(190, 190, 80, 30);
+    		    eventColor.setBounds(330, 190, 80, 30);
+    		    startTimeLabel.setBounds(10,150, 50,30);
+    		    endTimeLabel.setBounds(150, 140, 50, 30);
+    		    eventColorLabel.setBounds(300,140,80,30);
+    		    submit.setBounds(335,420,80,30);
+    		    
+    		    
+    		    // Size of the JPane
+    		    addElement.setSize(465,550);
+    		    addElement.setLayout(null);
+    		    addElement.setVisible(true);
+    		    
+    		    
+    		    // Adding all elements to the JPane for visibility.
+    		    addElement.add(addingEvents);
+    		    addElement.add(eventName);
+    		    addElement.add(reason);
+    		    addElement.add(EventStartDate);
+    		    addElement.add(EventEndDate);
     		    addElement.add(eventStart);
     		    addElement.add(eventEnd);
-    		    
-    		    
-    		    
-    		    
-    		    eventStart.setBounds(50, 140, 80, 30);
-    		    startTimeLabel.setBounds(10,140, 50,30);
-    		    
-    		    eventEnd.setBounds(190, 140, 80, 30);
-    		    endTimeLabel.setBounds(150, 140, 50, 30);
-    		    
-    		    JButton submit;
-    		    submit = new JButton("ADD");
-    		    submit.setBounds(335,420,80,30);
+    		    addElement.add(eventColor);
+    		    addElement.add(startTimeLabel);
+    		    addElement.add(endTimeLabel);
+    		    addElement.add(eventColorLabel);
     		    addElement.add(submit);
+    		
+    		    // When the 'ADD' button is clicked the event is created and saved to the database
+    		    // then closes the JPane so user can either add another event or view event by clicking
+    		    // on each day
+    		    submit.addActionListener(new ActionListener() {
+    		        public void actionPerformed(ActionEvent e)
+    		        {
+    		        	String stringEvent = eventName.getText();
+    		        	String startTimeDate = (EventStartDate.getText() + " "+ eventStart.getSelectedItem().toString());
+    		        	String endTimeDate = (EventEndDate.getText() + " " + eventEnd.getSelectedItem().toString());
+    		        	String stringNotes = reason.getText();
+    		        	String selectedColor = eventColor.getSelectedItem().toString();
+    		            addElement.dispose();
+    		            
+    		            
+    		            // Creates new event and saves to the database
+    		            CreateEvent event = new CreateEvent("kj7935", stringEvent, stringNotes, startTimeDate, endTimeDate, selectedColor);
+    		            
+    		            // Error control
+    		            try {
+							event.createNewEvent();
+						} catch (ClassNotFoundException | SQLException e1) {
+							System.out.println(e1);
+    		        }}
+    		    });
     		    
-    		    
-    		    
-    			// I will next be working on adding a userinput dialog that 
-    		    // the user will be able to type the title of the event they are
-    		    // adding. then a text box for location of event
-    		    // then start time & end time
-    		    // then if the event will be repeating
-    		    // then if user would like to be altered at time of event or before
-    		    // lasty i will implement a text box the user can type a description or 
-    		    // any notes of the event
-    		    
-    		    
-    		    
+    		   // I still need to implement the function so when the user selects a day they can view 
+    		    // their events for the given day.
     		    
     		}
     	});
@@ -379,6 +426,7 @@ public class classproject extends JFrame {
 		newevent.add(title, BorderLayout.CENTER);
 		newevent.add(option, BorderLayout.CENTER);
 		newevent.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		
 
 
 
