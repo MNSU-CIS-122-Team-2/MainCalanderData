@@ -1,7 +1,9 @@
 //importing all the necessary items to create the calendar
 import java.awt.BasicStroke;
+import java.sql.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
@@ -13,9 +15,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ContainerListener;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,13 +28,14 @@ import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
-
-import errorControl.TextFieldListener;
-
+import java.text.SimpleDateFormat;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.Date;
+
+import javax.swing.DefaultListCellRenderer;
 
 
 public class classproject extends JFrame {
@@ -147,20 +152,228 @@ public class classproject extends JFrame {
 		//adding the month and year
 		frame.add(month);
 		frame.add(addEvent);
+		
+
+		
+		// Creating new JFrame that opens anytime the user clicks the '+' Icon to 
+    	// Adds and saves an event to the database
+		
+		
+		addEvent.addActionListener(new ActionListener() 
+    	{
+			// implementing all elements
+			
+			classproject addElement = new classproject();
+			
+			JTextField addingEvents;
+		    JTextField eventName;
+		    JTextArea reason;
+		    
+		    JComboBox EventEndDate;
+		    JComboBox EventStartDate;
+		    JComboBox eventStart;
+		    JComboBox eventEnd;
+		    JComboBox eventColor;
+		    
+		    JLabel startTimeLabel;
+		    JLabel endTimeLabel;
+		    JLabel eventColorLabel;
+		    
+		    JButton submit;
+		    
+		    GregorianCalendar calendar;
+		    
+		    
+    		public void actionPerformed(ActionEvent e)
+    		{
+    			// Event Start times
+    			
+    		    String[] Times = {"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
+    		    		"1:00 AM", "1:15 AM", "1:30 AM", "1:45 AM", "2:00 AM", "2:15 AM",
+    		    		"2:30 AM", "2:45 AM", "3:00 AM", "3:15 AM", "3:30 AM", "3:45 AM",
+    		    		"4:00 AM", "4:15 AM", "4:30 AM", "4:45 AM", "5:00 AM", "5:15 AM",
+    		    		"5:30 AM", "5:45 AM", "6:00 AM", "6:15 AM", "6:30 AM", "6:45 AM",
+    		    		"7:00 AM", "7:15 AM", "7:30 AM", "7:45 AM", "8:00 AM", "8:15 AM",
+    		    		"8:30 AM", "8:45 AM", "9:00 AM", "9:15 AM", "9:30 AM", "9:45 AM", 
+    		    		"10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM",
+    		    		"11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM",
+    		    		"1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM",
+    		    		"2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM",
+    		    		"4:00 PM", "4:15 PM", "4:30 PM", "4:45 PM", "5:00 PM", "5:15 PM",
+    		    		"5:30 PM", "5:45 PM", "6:00 PM", "6:15 PM", "6:30 PM", "6:45 PM",
+    		    		"7:00 PM", "7:15 PM", "7:30 PM", "7:45 PM", "8:00 PM", "8:15 PM",
+    		    		"8:30 PM", "8:45 PM", "9:00 PM", "9:15 PM", "9:30 PM", "9:45 PM", 
+    		    		"10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM", "11:00 PM", "11:15 PM",
+    		    		"11:30 PM", "11:45 PM"};
+    		    
+    		    
+    		    // Event color options (Primary & Secondary colors) 
+    		    // will implement the actual color so user can reference
+    		    
+    		    String[] Colors = {"None","Red", "Yellow", "Blue",
+    		    		"Orange", "Green", "Violet"};
+    		    
+    		    // creating all elements
+    		    addingEvents = new JTextField("New Event");
+    		    eventName = new JTextField("title");
+    		    EventStartDate =  new JComboBox();
+    		    EventEndDate =  new JComboBox();
+    		    reason =new JTextArea("Description");
+    		    eventStart = new JComboBox(Times);
+    		    eventEnd = new JComboBox(Times);
+    		    eventColor = new JComboBox(Colors);
+    		    startTimeLabel = new JLabel("Starts:");
+    		    endTimeLabel =  new JLabel("Ends:");
+    		    eventColorLabel = new JLabel("Event Color:");
+    		    submit = new JButton("ADD");
+    		    
+    		    // Necessary adjustments
+    		    Font addEvent = new Font("Courier", Font.BOLD, 28);
+    		    addingEvents.setFont(addEvent);
+    		    addingEvents.setEditable(false);
+    		    addingEvents.setBorder(BorderFactory.createLineBorder(color));
+    		    
+    		    eventName.setHorizontalAlignment(JTextField.CENTER);
+    		    Font EventNameFont = new Font("Arial", Font.ITALIC, 18);
+    		    eventName.setFont(EventNameFont);
+    		    
+    		    
+    		    class DateItem{
+    		    Date mDate;
+    		    
+    		    public DateItem(Date date) {
+    		    	mDate = date;
+    		    }
+    		    public Date getDate() {
+    		        return mDate;
+    		    }
+    		    public String toString() {
+
+    		        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+    		        return sdf.format(mDate);
+    		    }
+    		    }
+    		    
+    		    Calendar calendar = Calendar.getInstance();
+				
+    		    for (int i = 0; i < 365; ++i) {
+    		    	EventStartDate.addItem(new DateItem(calendar.getTime()));
+    		    	EventEndDate.addItem(new DateItem(calendar.getTime()));
+    		        calendar.add(Calendar.DATE, 1);
+    		    }
+
+    		    // Setting the place of each element on the JPanel
+    		    addingEvents.setBounds(10, 0,350,80);
+    		    eventName.setBounds(120, 80, 200, 45);
+    		    reason.setBounds(10, 255, 400, 120);
+    		    EventStartDate.setBounds(70, 150, 90, 30);
+    		    EventEndDate.setBounds(105, 190, 90, 30);
+    		    eventStart.setBounds(180, 150, 80, 30);
+    		    eventEnd.setBounds(225, 190, 80, 30);
+    		    eventColor.setBounds(335, 150, 80, 30);
+    		    startTimeLabel.setBounds(20,150, 50,30);
+    		    endTimeLabel.setBounds(60, 190, 50, 30);
+    		    eventColorLabel.setBounds(265,150,80,30);
+    		    submit.setBounds(335,420,80,30);
+    		    
+    		    
+    		    // Size of the JPane
+    		    addElement.setSize(465,550);
+    		    addElement.setLayout(null);
+    		    addElement.setVisible(true);
+    		    
+    		    
+    		    // Adding all elements to the JPane for visibility.
+    		    addElement.add(addingEvents);
+    		    addElement.add(eventName);
+    		    addElement.add(reason);
+    		    addElement.add(EventStartDate);
+    		    addElement.add(EventEndDate);
+    		    addElement.add(eventStart);
+    		    addElement.add(eventEnd);
+    		    addElement.add(eventColor);
+    		    addElement.add(startTimeLabel);
+    		    addElement.add(endTimeLabel);
+    		    addElement.add(eventColorLabel);
+    		    addElement.add(submit);
+    		
+    		    // When the 'ADD' button is clicked the event is created and saved to the database
+    		    // then closes the JPane so user can either add another event or view event by clicking
+    		    // on each day
+    		    submit.addActionListener(new ActionListener() {
+    		        public void actionPerformed(ActionEvent e)
+    		        {
+    		        	String stringEvent = eventName.getText();
+    		        	String startTimeDate = (EventStartDate.getSelectedItem().toString() + " "+ eventStart.getSelectedItem().toString());
+    		        	String endTimeDate = (EventEndDate.getSelectedItem().toString() + " " + eventEnd.getSelectedItem().toString());
+    		        	String stringNotes = reason.getText();
+    		        	String selectedColor = eventColor.getSelectedItem().toString();
+    		            addElement.dispose();
+    		            
+    		            
+    		            // Creates new event and saves to the database
+    		            CreateEvent event = new CreateEvent("kj7935", stringEvent, stringNotes, startTimeDate, endTimeDate, selectedColor);
+    		            
+    		            // Error control
+    		            try {
+							event.createNewEvent();
+						} catch (ClassNotFoundException | SQLException e1) {
+							System.out.println(e1);
+    		        }}
+    		    });
+    		    
+    		}
+    	});
+		
+		
+RetriveEvent pullevent = new RetriveEvent("kj7935");
+
+        
+        try {
+        	ResultSet listofitems=pullevent.retriveEventForUser();
+        System.out.printf("%-25s%s%n","Start Time", "End Time");
+        while(listofitems.next()) {        
+        //formats out for correcting spacing as a proof of concept for print
+        System.out.printf("%-25s%s%n",listofitems.getString("START_TIME"),listofitems.getString("END_TIME"));
+        }
+        
+    } catch (ClassNotFoundException | SQLException e2) {
+        // TODO Auto-generated catch block
+        e2.printStackTrace();
+    }
+        
+        
+		
+		
+		
+		
+		
+		
+		
+
 
 		//adding each button representing each day
 		for(int i=0;i<one.size();i++) {
 			frame.add(one.get(i));}
 
-
+		
 		//adding the panels
 		frame.add(panel1, BorderLayout.CENTER);
 		frame.add(panel2, BorderLayout.CENTER);
 		// disposing the JFrame when the user hits the close button
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-	//SchedulingJFRAME	
+		//SchedulingJFRAME	
 		//adding 4 new buttons
+		JTextField viewEvents;
+		
+		viewEvents = new JTextField("FUNCTION TO PRINT TODAYS DATE"
+				+ "IN FORMAT 'WEDNESDAY NOVEMBER 18, 2020'");
+		
+		
+		/*		
+		
 		JButton appointment = new JButton("Add an appointment");
 		JButton event = new JButton("Add an event");
 		JButton cappointments= new JButton("See your appointments");
@@ -194,153 +407,10 @@ public class classproject extends JFrame {
 		event.setBounds(200, 250, 250, 50);
 		cappointments.setBounds(200,700,425,50);	
 		cevents.setBounds(200, 550, 300, 50);
-
+*/
 		
-		// Creating new JFrame that opens anytime the user clicks the '+' Icon to 
-    	// Adds and saves an event to the database
+		
     	
-		addEvent.addActionListener(new ActionListener() 
-    	{
-			// implementing all elements
-			
-			classproject addElement = new classproject();
-			
-			JTextField addingEvents;
-		    JTextField eventName;
-		    JTextField EventStartDate;
-		    JTextField EventEndDate;
-		    JTextArea reason;
-		    
-		    JComboBox eventStart;
-		    JComboBox eventEnd;
-		    JComboBox eventColor;
-		    
-		    JLabel startTimeLabel;
-		    JLabel endTimeLabel;
-		    JLabel eventColorLabel;
-		    
-		    JButton submit;
-		    
-    		public void actionPerformed(ActionEvent e)
-    		{
-    			// Event Start times
-    			
-    		    String[] Times = {"12:00 AM", "12:15 AM", "12:30 AM", "12:45 AM", 
-    		    		"1:00 AM", "1:15 AM", "1:30 AM", "1:45 AM", "2:00 AM", "2:15 AM",
-    		    		"2:30 AM", "2:45 AM", "3:00 AM", "3:15 AM", "3:30 AM", "3:45 AM",
-    		    		"4:00 AM", "4:15 AM", "4:30 AM", "4:45 AM", "5:00 AM", "5:15 AM",
-    		    		"5:30 AM", "5:45 AM", "6:00 AM", "6:15 AM", "6:30 AM", "6:45 AM",
-    		    		"7:00 AM", "7:15 AM", "7:30 AM", "7:45 AM", "8:00 AM", "8:15 AM",
-    		    		"8:30 AM", "8:45 AM", "9:00 AM", "9:15 AM", "9:30 AM", "9:45 AM", 
-    		    		"10:00 AM", "10:15 AM", "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM",
-    		    		"11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM",
-    		    		"1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM",
-    		    		"2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM",
-    		    		"4:00 PM", "4:15 PM", "4:30 PM", "4:45 PM", "5:00 PM", "5:15 PM",
-    		    		"5:30 PM", "5:45 PM", "6:00 PM", "6:15 PM", "6:30 PM", "6:45 PM",
-    		    		"7:00 PM", "7:15 PM", "7:30 PM", "7:45 PM", "8:00 PM", "8:15 PM",
-    		    		"8:30 PM", "8:45 PM", "9:00 PM", "9:15 PM", "9:30 PM", "9:45 PM", 
-    		    		"10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM", "11:00 PM", "11:15 PM",
-    		    		"11:30 PM", "11:45 PM"};
-    		    
-    		    // Event color options (Primary & Secondary colors) 
-    		    // will implement the actual color so user can reference
-    		    
-    		    String[] Colors = {"None","Red", "Yellow", "Blue", "Orange", "Green", "Violet"};
-    		    
-    		    // creating all elements
-    		    addingEvents = new JTextField("New Event");
-    		    eventName = new JTextField("title");
-    		    EventStartDate =  new JTextField("11/12/2020");
-    		    EventEndDate =  new JTextField("11/12/2020");
-    		    reason =new JTextArea("Description");
-    		    eventStart = new JComboBox(Times);
-    		    eventEnd = new JComboBox(Times);
-    		    eventColor = new JComboBox(Colors);
-    		    startTimeLabel = new JLabel("Starts:");
-    		    endTimeLabel =  new JLabel("Ends:");
-    		    eventColorLabel = new JLabel("Event Color:");
-    		    submit = new JButton("ADD");
-    		    
-    		    // Necessary adjustments
-    		    Font addEvent = new Font("Courier", Font.BOLD, 28);
-    		    addingEvents.setFont(addEvent);
-    		    addingEvents.setEditable(false);
-    		    addingEvents.setBorder(BorderFactory.createLineBorder(color));
-    		    
-    		    eventName.setHorizontalAlignment(JTextField.CENTER);
-    		    Font EventNameFont = new Font("Arial", Font.ITALIC, 18);
-    		    eventName.setFont(EventNameFont);
-    		    
-    		    EventStartDate.setHorizontalAlignment(JTextField.CENTER);
-    		    EventEndDate.setHorizontalAlignment(JTextField.CENTER);
-    		    
-    		    
-    		    // Setting the place of each element on the JPanel
-    		    addingEvents.setBounds(10, 0,350,80);
-    		    eventName.setBounds(120, 80, 200, 45);
-    		    reason.setBounds(10, 240, 400, 120);
-    		    EventStartDate.setBounds(50, 140, 80, 30);
-    		    EventEndDate.setBounds(190, 140, 80, 30);
-    		    eventStart.setBounds(50, 190, 80, 30);
-    		    eventEnd.setBounds(190, 190, 80, 30);
-    		    eventColor.setBounds(330, 190, 80, 30);
-    		    startTimeLabel.setBounds(10,150, 50,30);
-    		    endTimeLabel.setBounds(150, 140, 50, 30);
-    		    eventColorLabel.setBounds(300,140,80,30);
-    		    submit.setBounds(335,420,80,30);
-    		    
-    		    
-    		    // Size of the JPane
-    		    addElement.setSize(465,550);
-    		    addElement.setLayout(null);
-    		    addElement.setVisible(true);
-    		    
-    		    
-    		    // Adding all elements to the JPane for visibility.
-    		    addElement.add(addingEvents);
-    		    addElement.add(eventName);
-    		    addElement.add(reason);
-    		    addElement.add(EventStartDate);
-    		    addElement.add(EventEndDate);
-    		    addElement.add(eventStart);
-    		    addElement.add(eventEnd);
-    		    addElement.add(eventColor);
-    		    addElement.add(startTimeLabel);
-    		    addElement.add(endTimeLabel);
-    		    addElement.add(eventColorLabel);
-    		    addElement.add(submit);
-    		
-    		    // When the 'ADD' button is clicked the event is created and saved to the database
-    		    // then closes the JPane so user can either add another event or view event by clicking
-    		    // on each day
-    		    submit.addActionListener(new ActionListener() {
-    		        public void actionPerformed(ActionEvent e)
-    		        {
-    		        	String stringEvent = eventName.getText();
-    		        	String startTimeDate = (EventStartDate.getText() + " "+ eventStart.getSelectedItem().toString());
-    		        	String endTimeDate = (EventEndDate.getText() + " " + eventEnd.getSelectedItem().toString());
-    		        	String stringNotes = reason.getText();
-    		        	String selectedColor = eventColor.getSelectedItem().toString();
-    		            addElement.dispose();
-    		            
-    		            
-    		            // Creates new event and saves to the database
-    		            CreateEvent event = new CreateEvent("kj7935", stringEvent, stringNotes, startTimeDate, endTimeDate, selectedColor);
-    		            
-    		            // Error control
-    		            try {
-							event.createNewEvent();
-						} catch (ClassNotFoundException | SQLException e1) {
-							System.out.println(e1);
-    		        }}
-    		    });
-    		    
-    		   // I still need to implement the function so when the user selects a day they can view 
-    		    // their events for the given day.
-    		    
-    		}
-    	});
     		
     	
 		
@@ -355,30 +425,41 @@ public class classproject extends JFrame {
 			public void actionPerformed(ActionEvent e){ 
 
 		  classproject options = new classproject();
-	        JPanel title = new JPanel();
+	        //JPanel title = new JPanel();
 	        JPanel option = new JPanel();
 	        Color color = panel1.getBackground();
-	    	JTextField scheduling = new JTextField("Scheduling");
-
-	    	Font schedule = new Font("Arial", Font.BOLD, 48);
+	    	JTextField scheduling = new JTextField("FUNCTION TO PRINT TODAYS DATE IN FORMAT 'WEDNESDAY NOVEMBER 18, 2020'");
+	    	Font schedule = new Font("Arial", Font.BOLD, 12);
 	    	scheduling.setFont(schedule);
 	    	scheduling.setForeground(Color.black);
-	    	scheduling.setBounds(500,50,350,80);
-	    	scheduling.setEditable(false);	scheduling.setBorder(BorderFactory.createLineBorder(color));
+	    	scheduling.setBounds(400,100,300,100);
+	    	scheduling.setEditable(false);	
+	    	scheduling.setBorder(BorderFactory.createLineBorder(color));
 			options.setSize(1000, 1000);
 			options.setLayout(null);
 			options.setVisible(true);
 			options.add(scheduling);
-			for(int i=0;i<two.size();i++) {
-				options.add(two.get(i));}
-			options.add(title, BorderLayout.CENTER);
-			options.add(option, BorderLayout.CENTER);
+			
+			
+			//for(int i=0;i<two.size();i++) {
+				//options.add(two.get(i));}
+			//options.add(title, BorderLayout.CENTER);
+			//options.add(option, BorderLayout.CENTER);
+			
+			
 			options.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			
+			
+			
+			
 			}
+			
 		});
 		}
 		//AppointmentJFrame
 		//creating a new JFrame that will come up when the user clicks the appointment button
+		
+		/*
 			appointment.addActionListener(new ActionListener(){
 				 public void actionPerformed(ActionEvent e){  
 				    	classproject appointment = new classproject();
@@ -434,9 +515,18 @@ public class classproject extends JFrame {
     }
 
 
-    }); 
+    });*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 	    }
 
 
-	} 
+		}
