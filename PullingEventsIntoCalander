@@ -25,7 +25,7 @@ try {
 		}
       //catches sql errors
 	} catch (ClassNotFoundException | SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
 }
   		            
