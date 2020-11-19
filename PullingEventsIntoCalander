@@ -1,0 +1,30 @@
+//passing username to get events for
+RetriveEvent pullevent = new RetriveEvent("kj7935");
+//try block needed because of sql requitemnt for throwing errors
+try {
+      //result set is a datatype that only works when surroned by try blocks and catching sql exceptions
+      //pulls all the events for the user from the class retriveEventForUser
+		  ResultSet listofitems=pullevent.retriveEventForUser();
+      //testing code for formating if you enable .out.printf line below
+			//System.out.printf("%-20s%-35s%-25s%-25s%s%n","Event Name","Event Notes/Discription","Start Time", "End Time", "Color");
+      
+      //while there are more items within the listofitems run
+			while(listofitems.next()) {		
+      
+          //sets a string varible equal to each part of the current item the list has
+          //you can do a lot with these strings, with date you can split and set each element of the split to an element in an array for easy minpulating
+					String eventName = listofitems.getString("EVENTNAME");
+					String eventReason = listofitems.getString("REASON");
+					String start_Time = listofitems.getString("START_TIME");
+					String end_TIME = listofitems.getString("END_TIME");
+					String color = listofitems.getString("COLOR");
+          //enable to see output in print format
+					//formats out for correcting spacing as a proof of concept for print
+					//System.out.printf("%-20s%-35s%-25s%-25s%s%n",listofitems.getString("EVENTNAME"),listofitems.getString("REASON"),listofitems.getString("START_TIME"),listofitems.getString("END_TIME"),listofitems.getString("COLOR"));
+				}
+      //catches sql errors
+		} catch (ClassNotFoundException | SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+}
+  		            
