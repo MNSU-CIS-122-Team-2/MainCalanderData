@@ -54,6 +54,7 @@ sudo update-alternatives --config java
 //set the packages of both files to the package in netbeans
 //right click on the Calander1 project not package and go down to properties. Set the runtime platform to the one we created earilier for the rasberry pi and the main class to
 calander1.classproject
+//Go back into Calander 1 properties -> libraries -> click plus button by classpath ->add external jar file->add mssql-jdbc-8.4.1.jre8 , we downloaded this earlier for eclipse
 //Now click the big green run button and you should see the ip adress of the rasberry pi refrenced in the console. If you dont it means its running locally
 //the program will throw an error as it cant handle a headless Ui, however now the files have been transfered to the rasberry pi.
 //to check go to /home/pi/NetBeansProjects/Calander1/dist and you should see the Calander1.jar. Double clcik it ->calander1 and you should see all the classes
