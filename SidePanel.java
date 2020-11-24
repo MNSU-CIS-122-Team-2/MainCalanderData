@@ -32,7 +32,6 @@ import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
 
 
-
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.BufferedReader;
@@ -171,6 +170,7 @@ public class SidePanel extends JFrame {
   	JButton twentythird = new JButton("23");	JButton twentyfourth = new JButton("24");	JButton twentyfifth = new JButton("25");
   	JButton twentysixth = new JButton("26");	JButton twentyseventh = new JButton("27");	JButton twentyeighth = new JButton("28");
   	JButton twentyninth = new JButton("29");	JButton thirtieth = new JButton("30");	JButton thirtyfirst = new JButton("31");
+  	JButton colors=new JButton("Colors");
   	JButton thirtysecond = new JButton("1");	JButton addEvent = new JButton("+"); // creating a button to add events
   	//creating an array list to put the buttons representing each day
   	ArrayList<JButton> one= new ArrayList<JButton>();
@@ -198,6 +198,13 @@ public class SidePanel extends JFrame {
   		one.get(i).setBackground(Color.LIGHT_GRAY);
   	}
   	
+  	colors.setFocusable(false);
+	colors.setFont(new Font("Arial", Font.PLAIN, 40));
+	colors.setHorizontalAlignment(SwingConstants.RIGHT);
+	colors.setVerticalAlignment(SwingConstants.BOTTOM);
+	colors.setBorder(new LineBorder(Color.black));
+	colors.setBackground(Color.LIGHT_GRAY);
+  	
   	// Implementing an '+' icon to add events to the calendar
   	addEvent.setFocusable(false);
   	addEvent.setFont(new Font("Arial", Font.PLAIN, 60));
@@ -220,7 +227,7 @@ public class SidePanel extends JFrame {
   	twentysecond.setBounds(664,656,158,142);	twentythird.setBounds(822,656,158,142);	twentyfourth.setBounds(980,656,158,142);
   	twentyfifth.setBounds(32,798,158,142);	twentysixth.setBounds(190,798,158,142);	twentyseventh.setBounds(348,798,158,142);
   	twentyeighth.setBounds(506,798,158,142);	twentyninth.setBounds(664,798,158,142);	thirtieth.setBounds(822,798,158,142);
-  	thirtyfirst.setBounds(980,798,158,142); 
+  	thirtyfirst.setBounds(980,798,158,142); colors.setBounds(50, 250, 120, 60);
   	
   	first.setLayout(new BorderLayout()); second.setLayout(new BorderLayout()); third.setLayout(new BorderLayout()); 
   	fourth.setLayout(new BorderLayout()); fifth.setLayout(new BorderLayout()); sixth.setLayout(new BorderLayout());
@@ -1656,10 +1663,39 @@ public class SidePanel extends JFrame {
 				today.append("\n" + populate2.get(k));
 			}
 		}
-
+		frame.add(colors);
 		//adding each button representing each day
+		ArrayList<Integer> thirtyone=new ArrayList<Integer>();
+		thirtyone.add(0);
+		thirtyone.add(2);
+		thirtyone.add(4);
+		thirtyone.add(6);
+		thirtyone.add(7);
+		thirtyone.add(9);
+		thirtyone.add(11);
+		ArrayList<Integer> thirty=new ArrayList<Integer>();
+		thirty.add(3);
+		thirty.add(5);
+		thirty.add(8);
+		thirty.add(10);
+		ArrayList<Integer> twentyeight=new ArrayList<Integer>();
+		twentyeight.add(1);
+		
+		
+		//adding each button representing each day
+		if(thirtyone.contains(Calendar.getInstance().get(Calendar.MONTH))) {
 		for(int i=0;i<one.size();i++) {
 			frame.add(one.get(i));}
+		}
+		if(thirty.contains(Calendar.getInstance().get(Calendar.MONTH))) {
+			for(int i=0;i<30;i++) {
+				frame.add(one.get(i));}
+			}
+		if(twentyeight.contains(Calendar.getInstance().get(Calendar.MONTH))) {
+			for(int i=0;i<28;i++) {
+				frame.add(one.get(i));}
+			}
+
 
 
 		//adding the panels
@@ -1668,6 +1704,104 @@ public class SidePanel extends JFrame {
 		frame.add(panel3, BorderLayout.CENTER);
 		// disposing the JFrame when the user hits the close button
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		colors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){ 
+
+				  classproject options = new classproject();
+			        JPanel title = new JPanel();
+			        JPanel option = new JPanel();
+			        options.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			        Color color = panel1.getBackground();
+			        Font schedule = new Font("Arial", Font.BOLD, 48);
+			    	JTextField scheduling = new JTextField("Meaning of the Colors");
+			    	
+			    	JTextField red= new JTextField("");
+			    	JTextField red2= new JTextField("Appointments");
+			    	
+			    	JTextField blue= new JTextField("");
+			    	JTextField blue2= new JTextField("Birthdays/Anniversaries");
+			    	
+			    	JTextField yellow= new JTextField("");
+			    	JTextField yellow2= new JTextField("Activities");
+			    	
+			    	JTextField green= new JTextField("");
+			    	JTextField green2= new JTextField("Vacations");
+			    	
+			    	JTextField pink= new JTextField("");
+			    	JTextField pink2= new JTextField("Due Dates");
+			    	
+			    	JTextField orange= new JTextField("");
+			    	JTextField orange2= new JTextField("Dates");
+			    	
+			    	orange.setBackground(Color.ORANGE);
+			    	orange.setBounds(100, 700, 80, 80);
+			    	
+			    	orange2.setBounds(200, 700, 350, 80);
+			    	orange2.setFont(schedule);
+			    	
+			    	pink.setBackground(Color.PINK);
+			    	pink.setBounds(100, 600, 80, 80);
+			    	
+			    	pink2.setBounds(200, 600, 350, 80);
+			    	pink2.setFont(schedule);
+			    	
+			    	green.setBackground(Color.GREEN);
+			    	green.setBounds(100, 500, 80, 80);
+			    	
+			    	green2.setBounds(200, 500, 350, 80);
+			    	green2.setFont(schedule);
+			    	
+			    	yellow.setBackground(Color.YELLOW);
+			    	yellow.setBounds(100, 400, 80, 80);
+			    	
+			    	yellow2.setBounds(200, 400, 350, 80);
+			    	yellow2.setFont(schedule);
+			    	
+			    	blue.setBackground(Color.BLUE);
+			    	blue.setBounds(100, 300, 80, 80);
+			    	
+			    	blue2.setBounds(200, 300, 570, 80);
+			    	blue2.setFont(schedule);
+			    	
+			    	red.setBackground(Color.RED);
+			    	red.setBounds(100, 200, 80, 80);
+			    	
+			    	red2.setBounds(200, 200, 350, 80);
+			    	red2.setFont(schedule);
+
+			    	
+			    	scheduling.setFont(schedule);
+			    	scheduling.setForeground(Color.black);
+			    	scheduling.setBounds(250,50,800,80);
+			    	red2.setEditable(false);
+			    	blue2.setEditable(false);
+			    	yellow2.setEditable(false);
+			    	green2.setEditable(false);
+			    	pink2.setEditable(false);
+			    	orange2.setEditable(false);
+			    	scheduling.setEditable(false);	scheduling.setBorder(BorderFactory.createLineBorder(color));
+					options.setSize(1000, 1000);
+					options.setLayout(null);
+					options.setVisible(true);
+					options.add(scheduling);
+					options.add(red);
+					options.add(red2);
+					options.add(blue);
+					options.add(blue2);
+					options.add(yellow);
+					options.add(yellow2);
+					options.add(green);
+					options.add(green2);
+					options.add(pink);
+					options.add(pink2);
+					options.add(orange);
+					options.add(orange2);
+					
+					options.add(title, BorderLayout.CENTER);
+					options.add(option, BorderLayout.CENTER);
+					options.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+		});
 
 	//SchedulingJFRAME	
 		//adding 4 new buttons
