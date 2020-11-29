@@ -1,55 +1,24 @@
-
 import os
 import hashlib
+
 import binascii
 import sys
 from base64 import b64encode
-import pyodbc
+
 
 #gather arguments from input and it only takes the first 2
 arglist = sys.argv
 
 #assign arguments to defined strings
-LoginName = str(arglist[1])
-Pwd = str(arglist[2])
-
-#define connection to the db
-db = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
-               'Server=database-1.cczlwkbidopl.us-east-2.rds.amazonaws.com;'
-              'Database=CALANDER;'
-                    'UID=CISGroup2;'
-                    'PWD=Calander122;'
-               'Port=1433;')
-#assume connection is good, gather info
-data = db.cursor()
-
-queryc = "SELECT COUNT(*) FROM PERSON where LOGIN_NAME = '" + LoginName + "'"
-data.execute(queryc)
-
-#error control for user not in databse
-if data.fetchone()[0] <= 0:
-    print("User not found!")
-    data.close()
-    exit()
-    
-
-#print(data.fetchone()[0])
-
-#find a record mathing LoginName passed from the argument
-query = "SELECT * FROM PERSON where LOGIN_NAME = '" + LoginName + "'"
-data.execute(query)
-
-#iterate the rows returned (should only return 1), we have to make sure that LOGIN_NAME will always be unique
-for row in data:
-    row
-
-#close connection
-data.close()
+H_PASS = "9292f2416477fbf31d43a4e018f8bbd57ccdafc2ee4fdcf464dec8b3f48a49d4"
+#str(arglist[1])
+SALT = "941436762b740b50696512ab8ff7416e"#str(arglist[2])
+Pwd = "12345232"#str(arglist[3])
 
 #assuming that we found a match. Assigning stored data to variables to be processed
 #to compare later
-StoredHashedPassword = row[4]
-StoredSalt = row[5];
+StoredHashedPassword = H_PASS
+StoredSalt = SALT;
 
 #convert string to hex bytes to be used to generated the hashed password from the Pwd passed by user
 bsalt = bytes.fromhex(StoredSalt)
@@ -62,5 +31,3 @@ if ProcessedHashed.hex() == StoredHashedPassword:
     print("Valid")
 else:
     print ("Invalid")
-
-
