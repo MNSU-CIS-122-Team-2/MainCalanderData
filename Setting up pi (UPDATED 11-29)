@@ -60,7 +60,10 @@ calander1.classproject
 //Now click the big green run button and you should see the ip adress of the rasberry pi refrenced in the console. If you dont it means its running locally
 //the program will throw an error as it cant handle a headless Ui, however now the files have been transfered to the rasberry pi.
 //to check go to /home/pi/NetBeansProjects/Calander1/dist and you should see the Calander1.jar. Double clcik it ->calander1 and you should see all the classes
-//running the file on pi//Next we will set up the python scripts
+
+_________________NEW___________________________________________
+//running the file on pi
+//Next we will set up the python scripts
 //open rasberrypi console
 sudo apt update
 sudo apt install python3 idle3
@@ -78,7 +81,7 @@ print("hello world")
 
 --"python3","/home/pi/NetBeansProjects/Calander1/dist/Validate.py" for line 160
 --"python3","/home/pi/NetBeansProjects/Calander1/dist/Hash.py" for line 2456
-
+___________________________________ABOVE NEW____________________________
 
 //open rasberrypi console
 cd /home/pi/NetBeansProjects/Calander1/dist
