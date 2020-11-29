@@ -54,16 +54,38 @@ sudo update-alternatives --config java
 //set the packages of both files to the package in netbeans
 //right click on the Calander1 project not package and go down to properties. Set the runtime platform to the one we created earilier for the rasberry pi and the main class to
 calander1.classproject
+
+
 //Go back into Calander 1 properties -> libraries -> click plus button by classpath ->add external jar file->add mssql-jdbc-8.4.1.jre8 , we downloaded this earlier for eclipse
 //Now click the big green run button and you should see the ip adress of the rasberry pi refrenced in the console. If you dont it means its running locally
 //the program will throw an error as it cant handle a headless Ui, however now the files have been transfered to the rasberry pi.
 //to check go to /home/pi/NetBeansProjects/Calander1/dist and you should see the Calander1.jar. Double clcik it ->calander1 and you should see all the classes
-//running the file on pi
+//running the file on pi//Next we will set up the python scripts
+//open rasberrypi console
+sudo apt update
+sudo apt install python3 idle3
+python3
+print("hello world")
+
+//if that worked then python3 has been sucesffuly installed
+// Next find the file location /home/pi/NetBeansProjects/Calander1/dist
+//right click and select new file, do this twice for each respective python file and name each Validate.py and Hash.py
+//next right click on each and select open with, then select python3 idle
+//Copy and paste the respective code needed for each file and click file->save
+//next go into netbeans and find the create procedure path lines, 
+//respectively mine were lines 2456 for the Hash.py and lines 160 for the Validate.py
+//Assuming you have followed my steps very carefully above you should be able to copy and paste the following paths
+
+--"python3","/home/pi/NetBeansProjects/Calander1/dist/Validate.py" for line 160
+--"python3","/home/pi/NetBeansProjects/Calander1/dist/Hash.py" for line 2456
+
 
 //open rasberrypi console
 cd /home/pi/NetBeansProjects/Calander1/dist
 java -cp Calander1.jar calander1.classproject
 //the calander ui should now pop up and run like normal
+
+
 
  //Next we will create an executable on the desktop so you dont have to do this each time
  //first right click on the desktop of teh rasberry pi and create a new nextfile called Calander.sh
