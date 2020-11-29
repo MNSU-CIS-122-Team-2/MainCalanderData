@@ -64,9 +64,9 @@ public class DatabaseTest {
 					String email=input.next();
 					
 					//passes all inputs above to create an object of new user
-					CreateUser newuser = new CreateUser(fname,lname,userName,email);		
+					//CreateUser newuser = new CreateUser(fname,lname,userName,email);		
 					//calls the method that passes all information to the sql procdure to create an event
-					int y=newuser.checkDuplicate();
+					//int y=newuser.checkDuplicate();
 					//this if block handles retriving events based on what user is logged in, in this case its predetermined because the login ui dosent exist yet
 				}else if(x.equals("3")) {
 					RetriveEvent user = new RetriveEvent("nathan.mnsu");
@@ -125,6 +125,7 @@ class CreateUser{
 		this.userName=userName;
 		this.email=email;
 		this.h_Pass=h_Pass;
+		this.salt=salt;
 	}
 	//begninng of getblock
 	private String getfName() {
