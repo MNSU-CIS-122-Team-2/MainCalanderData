@@ -1,5 +1,4 @@
 
-
 package Calendar;
 
 
@@ -145,10 +144,20 @@ public class classproject extends JFrame {
 		// giving the log in button an action listener that will check the username and password
 		login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				
 				//using try statement to catch exceptions
 				try {
+					
+					String h_Pass = "";
+                    String salt ="";
+                    GetSaltAndHash salt_And_Hash = new GetSaltAndHash(userset.getText());
+                    ResultSet pulledSaltAndHash = salt_And_Hash.RetriveSAndH();
+                    while (pulledSaltAndHash.next()) {
+                        h_Pass=pulledSaltAndHash.getString("H_PASS");
+                        salt=pulledSaltAndHash.getString("SALT");
+                    }
 					//using a process builder to open the python file specified and run it
-					ProcessBuilder processbuilder = new ProcessBuilder("python","c:\\\\Calendar\\\\Validate.py",""+userset.getText(),""+passwordset.getText());
+                    ProcessBuilder processbuilder = new ProcessBuilder("python","c:\\\\Calendar\\\\Validate.py",""+h_Pass,""+salt,""+passwordset.getText());
 					//telling the process builder to start running it
 					Process process = processbuilder.start();
 					//using  a buffered reader to read the output of the processbuilder
@@ -159,6 +168,14 @@ public class classproject extends JFrame {
 					System.out.println(check);
 					//if the result is valid the program will open a new frame with the calendar of the user
 					if(check.equals("Valid")) {
+						
+					
+					
+					
+				
+					
+					
+				
 				
 
 		//creating a new gregorian calendar to help set the current day and year
@@ -174,7 +191,7 @@ public class classproject extends JFrame {
   	JButton twentythird = new JButton("23");	JButton twentyfourth = new JButton("24");	JButton twentyfifth = new JButton("25");
   	JButton twentysixth = new JButton("26");	JButton twentyseventh = new JButton("27");	JButton twentyeighth = new JButton("28");
   	JButton twentyninth = new JButton("29");	JButton thirtieth = new JButton("30");	JButton thirtyfirst = new JButton("31");
-  	JButton colors=new JButton("Colors");  JButton share= new JButton("!"); JButton next= new JButton(">");
+  	JButton colors=new JButton("Colors");  JButton share= new JButton("!"); 
   	JButton thirtysecond = new JButton("1");	JButton addEvent = new JButton("+"); // creating a button to add events
   	//creating an array list to put the buttons representing each day
   	ArrayList<JButton> one= new ArrayList<JButton>();
@@ -209,14 +226,7 @@ public class classproject extends JFrame {
 	colors.setBorder(new LineBorder(Color.black));
 	colors.setBackground(Color.LIGHT_GRAY);
 	
-	next.setFocusable(false);
-	next.setFont(new Font("Arial", Font.PLAIN, 40));
-	next.setHorizontalAlignment(SwingConstants.RIGHT);
-	next.setVerticalAlignment(SwingConstants.BOTTOM);
-	next.setBorder(new LineBorder(Color.black));
-	next.setBackground(Color.LIGHT_GRAY);
 	
-	next.setBounds(800,150, 50, 50);
   	
   	// Implementing an '+' icon to add events to the calendar
   	addEvent.setFocusable(false);
@@ -1761,7 +1771,7 @@ public class classproject extends JFrame {
 		}
 		colors.setBounds(100, 50, 120, 80);
 		frame.add(colors);
-		frame.add(next);
+		
 		share.setBounds(100, 150,50, 50);
 		share.setBackground(Color.LIGHT_GRAY);
 		frame.add(share);
@@ -1842,7 +1852,7 @@ public class classproject extends JFrame {
 			    	orange2.setBounds(200, 700, 350, 80);
 			    	orange2.setFont(schedule);
 			    	
-			    	pink.setBackground(Color.PINK);
+			    	pink.setBackground(Color.MAGENTA);
 			    	pink.setBounds(100, 600, 80, 80);
 			    	
 			    	pink2.setBounds(200, 600, 350, 80);
@@ -2294,30 +2304,36 @@ public class classproject extends JFrame {
 					
 					public void actionPerformed(ActionEvent e){
 						try {
-						CreateUser newus=new CreateUser(name2.getText(),lastname2.getText(),userset.getText(),email2.getText());
-						if(newus.checkDuplicate()==0) {
 							
+							ProcessBuilder pb = new ProcessBuilder("python","c:\\\\Calendar\\\\Hash.py",""+userset.getText(),""+passwordset.getText());
+							Process p = pb.start();
+
+							BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
+							
+							String line = bfr.readLine();
+							String line2=bfr.readLine();
+									
+							System.out.println(line);
+							System.out.println(line2);
+						
+						
+							
+						CreateUser creating=new CreateUser(name2.getText(), lastname2.getText(), userset.getText(),email2.getText(),line2,line);
+						if(creating.checkDuplicate()==0) {
 							System.out.println("username is used");
 						}
 						else {
 						
-							//using a process builder to open the python file specified and run it
-							ProcessBuilder processbuilder = new ProcessBuilder("python","c:\\\\Calendar\\\\Hash.py",userset.getText(),passwordset.getText());
-							//telling the process builder to start running it
-							Process process = processbuilder.start();
-							//using  a buffered reader to read the output of the processbuilder
-							BufferedReader buffer = new BufferedReader(new InputStreamReader(process.getInputStream()));
-							// giving a string the value of the output of the python file so its easy to compare
-							frame.dispose();
+							
+							
 						
 						}
 						}
 						catch(Exception Exception) {
 							
 						}
-					}
-					}	
-				);
+			}
+					});
 			
 			
 		}
