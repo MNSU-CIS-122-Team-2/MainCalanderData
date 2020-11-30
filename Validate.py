@@ -10,10 +10,9 @@ from base64 import b64encode
 arglist = sys.argv
 
 #assign arguments to defined strings
-H_PASS = "9292f2416477fbf31d43a4e018f8bbd57ccdafc2ee4fdcf464dec8b3f48a49d4"
-#str(arglist[1])
-SALT = "941436762b740b50696512ab8ff7416e"#str(arglist[2])
-Pwd = "12345232"#str(arglist[3])
+H_PASS = str(arglist[1])
+SALT = str(arglist[2])
+Pwd = str(arglist[3])
 
 #assuming that we found a match. Assigning stored data to variables to be processed
 #to compare later
