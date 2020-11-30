@@ -2452,17 +2452,14 @@ public class classproject extends JFrame {
 					public void actionPerformed(ActionEvent e){
 						try {
 							
-							ProcessBuilder pb = new ProcessBuilder("python","c:\\\\Calendar\\\\Hash.py",""+passwordset.getText());
-							Process p = pb.start();
+							ProcessBuilder processbuilder = new ProcessBuilder("python","c:\\\\Calendar\\\\Hash.py",""+passwordset.getText());
+							Process process = processbuilder.start();
 
-							BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
+							BufferedReader buffer = new BufferedReader(new InputStreamReader(process.getInputStream()));
 							
-							String line = bfr.readLine();
-							String line2=bfr.readLine();
-									
-							System.out.println(line);
-							System.out.println(line2);
-						
+							String line = bufferr.readLine();
+							String line2=buffer.readLine();
+							
 						
 							
 						CreateUser creating=new CreateUser(name2.getText(), lastname2.getText(), userset.getText(),email2.getText(),line2,line);
