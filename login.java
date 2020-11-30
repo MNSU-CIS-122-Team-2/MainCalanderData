@@ -246,14 +246,14 @@ public class login {
 							//Reading the output
 							BufferedReader buffer = new BufferedReader(new InputStreamReader(process.getInputStream()));
 							//Giving strings the value of the outputs so they are easier to run
-							String line = buffer.readLine();
-							String line2=buffer.readLine();
+							String result = buffer.readLine();
+							String result2=buffer.readLine();
 							
 						
 						
 							//Using the create user method to store the user
 						
-						CreateUser creating=new CreateUser(name2.getText(), lastname2.getText(), userset.getText(),email2.getText(),line2,line);
+						CreateUser creating=new CreateUser(name2.getText(), lastname2.getText(), userset.getText(),email2.getText(),result2,result);
 						//Checking if the username has been entered, if it has a message will come up
 						if(creating.checkDuplicate()==0) {
 							System.out.println("username is used");
