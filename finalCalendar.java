@@ -161,6 +161,11 @@ public class classproject extends JFrame {
                         h_Pass=pulledSaltAndHash.getString("H_PASS");
                         salt=pulledSaltAndHash.getString("SALT");
                     }
+                    
+                    if(h_Pass=="") {
+                    	userset.setText("invalid");
+                    	passwordset.setText("invalid");
+                    }
 					//using a process builder to open the python file specified and run it
                     ProcessBuilder processbuilder = new ProcessBuilder("py","c:\\\\Calendar\\\\Validate.py",""+h_Pass,""+salt,""+passwordset.getText());
 					//telling the process builder to start running it
@@ -2373,9 +2378,10 @@ public class classproject extends JFrame {
   
 	
 			}
-					// if the username or password is invalid, the jtextfield for the username will be set to invalid
+					// if the password is invalid, the jtextfield for the username will be set to invalid
 			else {
 				userset.setText("invalid");
+				passwordset.setText("invalid");
 			}
 			
 			
@@ -2383,7 +2389,8 @@ public class classproject extends JFrame {
 
 			}
 				//catching an exception
-		catch(Exception n){System.out.println("error");}
+		catch(Exception n){/*userset.setText("invalid");*/
+			System.out.println("error");}
 		
 		
 		
