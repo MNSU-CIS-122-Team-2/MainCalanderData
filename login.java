@@ -131,9 +131,11 @@ public class login {
 					//this program will only change the user input into valid
 					if(check.equals("Valid")) {
 						userset.setText("valid");
+						userset.setText("valid");
 					}
 					//else the program will change the user input to invalid
 					else {
+						password.setText("invalid");
 						userset.setText("invalid");
 					}
 				}
